@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { logInPost } from "fetch/fetch";
+import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 
 export default function LogIn() {
@@ -12,10 +13,50 @@ export default function LogIn() {
     }));
   };
 
+  const [loading, setLoading] = useState(false);
+  const [userData, setUserData] = useState([]);
+  const [error, setError] = useState(null);
+  //   useEffect(() => {
+  //     setLoading(true);
+  //     const fetchTrendingMovies = () => {
+  //       logInPost(dataSubmit)
+  //         .then((results) => {
+  //           setUserData(results);
+  //           setError(null);
+  //         })
+  //         .catch((error) => {
+  //           setError("Ooops. Something went wrong...");
+  //           console.log(error);
+  //         })
+  //         .finally(() => setLoading(false));
+  //     };
+  //     fetchTrendingMovies();
+  //   }, [dataSubmit]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(dataSubmit);
+    setLoading(true);
+    const fetchTrendingMovies = () => {
+      logInPost(dataSubmit)
+        .then((results) => {
+          setUserData(results);
+          setError(null);
+        })
+        .catch((error) => {
+          setError("Ooops. Something went wrong...");
+          console.log(error);
+        })
+        .finally(() => setLoading(false));
+    };
+    fetchTrendingMovies();
   };
+
+  useEffect(() => {
+    console.log(userData);
+    console.log(error);
+    console.log(loading);
+  }, [userData, error, loading]);
+
   return (
     <div
       style={{
@@ -36,7 +77,7 @@ export default function LogIn() {
             type="email"
             placeholder="Enter email"
             value={dataSubmit.username}
-            onChange={(e) => handleInputChange(e, "email")}
+            onChange={(e) => handleInputChange(e, "username")}
           />
         </Form.Group>
 
